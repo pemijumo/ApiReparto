@@ -18,11 +18,11 @@ var urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Jso
 */
 
 
-var urlDOMAUX = "http://192.168.2.204:80/"; var Publi = 1;
+var urlDOMAUX = "http://192.168.2.204:70/"; var Publi = 1;
 var urlWcfAUX = "http://192.168.2.204:60/WcfServiceLibrary1.Json.svc/"; 
 var urlDOM    = ""; 
 // var urlWcf    = ""; 
-var urlDOM2    = "http://192.168.2.204:80/"; var Publi = 1; //activa
+var urlDOM2    = "http://192.168.2.204:70/"; var Publi = 1; //activa
 var urlWcf2    = "http://192.168.2.204:60/WcfServiceLibrary1.Json.svc/"; //activa
 
 // var urlWcf = "http://192.168.2.100:100/wcf/WcfServiceLibrary1.Json.svc/"; 
@@ -70,13 +70,17 @@ $(document).bind("pageinit", function () {
         $(this).addClass('operando');
         if(id == "TELMEX"){
           $("#TELMEX").addClass('operando');
-          urlDOM = "http://187.237.98.114:80/"; 
-          urlWcf = "http://187.237.98.114:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+//          urlDOM = "http://187.237.98.114:80/"; 
+//          urlWcf = "http://187.237.98.114:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+          urlDOM = "http://192.168.2.204:70/"; 
+          urlWcf = "http://192.168.2.204:60/WcfServiceLibrary1.Json.svc/"; 
         }
         if(id== "AXTEL"){
           $("#AXTEL").addClass('operando');
-          urlDOM = "http://189.203.180.22:80/";
-          urlWcf = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+//          urlDOM = "http://189.203.180.22:80/";
+//          urlWcf = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+          urlDOM = "http://192.168.2.204:70/";
+          urlWcf = "http://192.168.2.204:60/WcfServiceLibrary1.Json.svc/"; 
         }
         window.localStorage.removeItem("IPServidor");
         window.localStorage.setItem("IPServidor", id);
