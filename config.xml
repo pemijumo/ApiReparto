@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+        id          = "Halconet_2016"
+        version     = "1.0.3"
+        versionCode = "6" >
+        <icon src="img/icono_halconetapp.png" />
+        <!--<splash src="img/icono_halconetapp.png"/>-->
+        
+      <!-- versionCode is optional and Android only -->
+
+        <preference name="phonegap-version" value="3.7.0" />
+
+        <name>HalcoNet</name>
+      
+        <description>
+            Aplicación HalcoNet
+        </description>
+
+        <author href="http://www.tractozone.com.mx" email="contacto@tractozone.com.mx">
+            Grupo TractoZone
+        </author>
+
+      <gap:plugin name="org.apache.cordova.dialogs" />
+      <gap:plugin name="org.apache.cordova.geolocation" /> <!--  gps -->
+      <plugin name="com.phonegap.plugins.barcodescanner" spec="2.0.0" source="pgb" /> <!-- scanner -->
+      <plugin name="org.apache.cordova.network-information"  />
+      <gap:plugin name="org.apache.cordova.device" />
+      <plugin name="com.teamnemitoff.phonedialer" spec="0.3.0" source="pgb" />
+      <!--<gap:plugin name="org.apache.cordova.network-information" />-->
+    </widget>

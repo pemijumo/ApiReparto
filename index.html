@@ -1,0 +1,402 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>HalcoNET App</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">    	
+    <script type="text/javascript" src="phonegap.js"></script>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />   
+	<link rel="stylesheet" href="scripts/jquery-ui.min.css">
+    <link rel="stylesheet" href="css/APP.css" />
+    <link rel="stylesheet" href="css/estilosV2.css" />
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/Jactions.js"></script>
+    <script type="text/javascript" src="js/reparto.js"></script>
+    <script type="text/javascript" src="js/llamadas.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>-->
+
+    <!-- mapa -->
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="jquery/gmaps.js"></script>
+    <script type="text/javascript" src="jquery/prettify.js"></script>
+    <!-- slide menu -->
+  <link rel="stylesheet" href="css/jqm.slidemenu.css" />
+  <link rel="stylesheet" href="font-awesome-4.5.0/css/font-awesome.min.css">
+  <!-- <link rel="stylesheet" href="css/trZone.css" /> -->
+  <script src="js/jqm.slidemenu.js"></script>
+      <script type="text/javascript">
+
+          var online = false;
+          var devceid;
+          //document.addEventListener("deviceready", onDeviceReady, false);
+          document.addEventListener("backbutton", handleBackButton, true);
+
+         
+
+          function handleBackButton() {
+
+              if ($.mobile.activePage.attr('id') == 'home') {
+                  navigator.app.exitApp();
+              } 
+//              else if ($.mobile.activePage.attr('id') == 'cita') {
+//                  $.mobile.changePage('#listaUsuarios');
+//              } 
+              //else {
+              //    navigator.app.backHistory();
+              //}
+          }
+
+          document.addEventListener("deviceready", onDeviceReady, false);
+          
+          function onDeviceReady() {
+              
+              var Ident = "";
+              Ident = device.uuid;
+
+              var ID = localStorage.getItem('ID');
+
+              // alert(Ident+" - id "+ID);
+              if (ID != Ident) {
+                  $.mobile.changePage("login.html", {
+                      reloadPage: true,
+                      transition: "slide"
+                  });
+              }
+              else{
+                MuestraRepartidor();
+              }
+        
+              var ipServidor = window.localStorage.getItem("IPServidor");
+              if(ipServidor == null || ipServidor ==""){
+                $("#"+ipServidor).addClass('operando');
+                //urlDOM = "http://189.203.180.22:80/";
+                //urlWcf = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                  urlDOM = "http://192.168.2.204:70/";
+                  urlWcf = "http://192.168.2.204:60/WcfServiceLibrary1.Json.svc/"; 
+                // alert("180.22");
+              }
+              else{
+                if(ipServidor == "TELMEX"){
+                  $("#"+ipServidor).addClass('operando');
+//                  urlDOM = "http://187.237.98.114:80/"; 
+//                  urlWcf = "http://187.237.98.114:100/wcf/WcfServiceLibrary1.Json.svc/";
+                  urlDOM = "http://192.168.2.204:70/";
+                  urlWcf = "http://192.168.2.204:60/WcfServiceLibrary1.Json.svc/";  
+                  // alert("TELMEX 98.114");                  
+                }
+                if(ipServidor== "AXTEL"){
+                  $("#"+ipServidor).addClass('operando');
+                  //urlDOM = "http://189.203.180.22:80/";
+                  //urlWcf = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/";
+                  urlDOM = "http://192.168.2.204:70/";
+                  urlWcf = "http://192.168.2.204:60/WcfServiceLibrary1.Json.svc/"; 
+                  // alert("AXTEL 180.22");                  
+                }
+              }
+
+          }
+      $(document).delegate(".ui-content", "scrollstart", false);
+      $(function(){
+          //clic en un enlace de la lista
+          $('body').on('click', '.ancla', function() {
+
+              var strAncla=$(this).attr('href');
+              var titleF=$(this).attr('title');
+
+              $('body,html').stop(true,true).animate({
+                  scrollTop: $(strAncla).offset().top
+              },1000);
+
+              $('#numFacturaR').val(titleF);
+          });
+      });
+
+        </script>
+      
+</head>
+<body style="background-color:#fff;">
+  <div id="slidemenu" style="top: 0px!important;position: absolute;">
+      <div id="profile">
+        <!-- <img src="img/tegan.jpg"> -->
+      </div>
+      <ul>
+        <li ><a href="#home" id="catalogo"  style="display:none"><!--img src="img/smico3.png"--><i class="fa fa-barcode fa-lg"></i> Artículos</a></li>
+        <li><a href="#consultaReparto" id="consultaRep" style="display:none"><i class="fa fa-map-signs fa-lg"></i> Rutas</a></li>
+        <li><a href="#clientes" id="coordenadas" style="display:none"><i class="fa fa-map-marker fa-lg"></i> Clientes</a></li>
+        <li><a href="#reparto" id="entregaReparto" style="display:none"><i class="fa fa-motorcycle fa-lg"></i> Reparto</a></li>
+        <li><a href="#llamadas" id="hacerLlamadas" style="display:none"><i class="fa fa-phone fa-lg"></i> Llamadas</a></li>
+      </ul>
+  </div>
+
+  <div data-role="page" id="home" style="top: 0px!important;position: absolute;" class="paginaActiva">
+      <div data-role="header" data-position="inline" data-theme="P"> 
+          <a href="#" data-slidemenu="#slidemenu" class="slidemenu1 " data-slideopen="false"  style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-bars fa-lg"></i></a>
+          <h1>Catálogo de artículos</h1>       
+          <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+
+      
+      <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-collapsed="false" data-theme="b" id="catalogoProductos">
+          <legend>Buscar</legend>
+          <label for="">Código:</label>       <!-- data-clear-btn="true" --> 
+                  <input type="text"   name="txtItemCode" id="txtItemCode" placeholder="Código artículo"/>
+             
+          <label for="">Nombre:</label>       
+          <input type="text"  name="txtNombreArticulo" id="txtNombreArticulo" placeholder="Nombre artículo"/>
+          		
+  		<a href="index.html" data-role="button" data-icon="search" title="Buscar" data-inline="true" data-iconpos="notext" id="btnBusqArt" onclick="return false">Buscar</a>           
+  		<a href="index.html" data-role="button" data-icon="delete" title="Limpiar" data-inline="true" data-iconpos="notext" id="btnLimpArt" onclick="return false">Limpiar</a>                  
+  		
+          <!-- <label id="sDescripcionArticulo" ></label> -->   
+
+          <!--<div class="ui-filterable">
+              <input id="autocomplete-input" data-type="search" placeholder="Find a city...">
+          </div>-->
+      </div>
+     
+  		
+      <!--CUERPO DE INFORMACION-->
+      <div id="idInformacion" style="display: block;">
+          <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" style="display: none;" id="CalUtil">
+              <legend>Cálculo de Utilidad</legend> 
+              <div id="Div2" class="ui-grid-b">
+                  <div id="Div4" class="ui-block-a" style="width:50%;">
+                      <label>Pesos
+                          <input id="rbtPesos" name="R1" title="Pesos" type="radio" checked="checked" value="V1" />         
+                      </label>   
+                  </div>
+
+                  <div id="Div5" class="ui-block-b" style="width:50%;">
+                      <label>Dolares 
+                          <input id="rbtDolares" name="R1" title="Dolares" type="radio" value="V1" /> 
+                      </label>
+                  </div>
+              </div>
+
+              <div  data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-collapsed="false">
+                  <label for="textinput-5"> Precio ($):
+                      <input type="number" data-clear-btn="true" name="txtPrecio" id="txtPrecio" data-mini="true"/>
+                      <input id="btnAplicPrecio" type="button" value="Calcular Utilidad" onclick="return false"/>
+                  </label>
+
+                  <label for="textinput-5">
+                       Utilidad (%):
+                      <input type="number" data-clear-btn="true" name="txtUtilidad" id="txtUtilidad" data-mini="true"/>
+                  </label>
+                      <input id="btnAplicUtilidad" type="button" value="Calcular Precio" onclick="return false"/>
+              </div>
+          </div>
+  		<!--=================================================================================================================================== descuento -->
+          <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" style="display: none;" id="DescMax" >
+              <legend>Descuento Máximo</legend>          
+        
+              <div class="radioDescuento" id="radioDescuento">
+  				<div class="radioD activo" id="descuentoM">Mayoreo</div>
+  				<div class="radioD " id="descuentoT">Transporte</div><div class="clear"></div>
+  			</div>
+  			
+  			 <div class="descuentos" id="descuentoMayoreo"> </div>
+  			<div class="descuentos" id="descuentoTransporte"></div>
+
+
+                              
+          </div><!--=================================================================================================================================== descuento -->
+      
+          <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" style="display: none;" id="LstPrice"  >
+              <legend>Listas de precios</legend>         
+              <!-- <table data-role="table" id="tblLista0" data-mode="columntoggle" data-column-btn-text="" data-column-btn-theme="a" class="phone-compare ui-shadow table-stroke" > -->
+              <table  id="tblLista0" class="tablaPrecios" cellspacing="0">
+                  <thead>
+                      <tr>
+                          <th width=50% class="label">Lista de Precios</th>
+                          <th width=25% style="text-align:center">MXP</th>
+                          <th width=25% style="text-align:center">USD</th>
+                      </tr>
+                  </thead>
+              </table>
+              <div  id="tblLista" >            
+              </div>
+
+          </div>
+
+          <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" style="display: none;" id="LstStock">
+              <legend>Stocks</legend>
+              <table id="tblListaStock0" class="tablaPrecios" cellspacing="0">
+                  <thead>
+                      <tr>
+                          <th width=50% >Almacén</th>
+                          <th width=25% style="text-align:center">Stock</th>
+                          <th width=25% style="text-align:center">Solicitado</th>
+                      </tr>
+                  </thead>
+              </table>
+              <div  id="tblListaStock" >
+              </div>
+          </div>         
+
+      </div>
+     <!-- <footer data-role="footer" data-position="fixed" id="footer" style="display:block">
+          <div id="Div12" class="ui-grid-b">
+                  <div class="ui-block-a">
+                      <label>Usuario:</label>
+                  </div>
+                  <div id ="Div13" class="ui-block-b">
+                      <label id ="lblUsuario"></label>
+                      <label id="Label1" ></label>   
+                  </div>            
+           </div>
+      </footer>-->
+  </div>
+  <div data-role="page" id="clientes" style="top: 0px!important;position: absolute;" class="paginaActiva">
+      <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" data-slidemenu="#slidemenu" class="slidemenu1 " data-slideopen="false"  style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Registrar Cliente</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-collapsed="false" data-theme="b" style="display:block" id="registroCliente">
+          <legend>Registrar cliente</legend>
+          <div id="mensajeEnvio"></div>
+          <div class="etiquetasReparto">Cliente*:</div>
+          <div class="etiquetasReparto"><input type="text" id="cliente"></div>
+          <div class="etiquetasReparto">Nombre*:</div>
+          <div class="etiquetasReparto"><input type="text" id="nombreC"></div>
+          <!-- <div class="etiquetasReparto">Nombre de la dirección*:</div>
+          <div class="etiquetasReparto"><input type="text" id="descripcionC"></div> -->
+          <div class="etiquetasReparto"><label for="descripcionC" class="">Nombre de la dirección*:</label></div>
+          <div class="etiquetasReparto">  
+            <select name="descripcionC" id="descripcionC" data-role="none" class="combos">
+              <option value="centro" >Centro de entrega primario</option>
+              <option value="centro2" >Centro de entrega secundario</option>
+              <option value="oficinas" selected="selected">Oficinas administrativas</option>
+              <option value="corporativo">Corporativo</option>
+            </select>
+          </div>
+
+          <a href="#" data-role="button" data-icon="delete" title="Limpiar" data-inline="true" data-iconpos="notext" id="btnLimpCli" onclick="return false">Limpiar</a>
+          <div class="etiquetasReparto">Coordenadas:</div>
+          <div class=""><input type="text" id="coordenadasC" DISABLED></div>
+          <div><button class="ui-btn ui-corner-all" onclick="GPS()" id="obtenerCoordenadas" ><i class="fa fa-map-marker fa-lg"> </i> Obtener Coordenadas</button></div>
+          <div><button class="ui-btn ui-corner-all" id="enviarCliente"><i class="fa fa-arrow-right fa-lg"> </i> Enviar</button></div>
+      </div>  
+  </div>
+  <div data-role="page" id="consultaReparto" style="top: 0px!important;position: absolute;" class="paginaActiva">
+      <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" data-slidemenu="#slidemenu" class="slidemenu1 " data-slideopen="false"  style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Consultar reparto</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-collapsed="false" data-theme="b" style="display:block" id="registroCliente">
+          <legend>Consultar rutas</legend>
+          <table>
+            <tr>
+              <td>Desde:</td>
+              <td>Hasta:</td>
+            </tr>
+             <tr>
+              <td><input type="text" id="fechaIni" class="datepicker fechas" readonly></td>
+              <td><input type="text" id="fechaFinal" class="datepicker fechas" readonly></td>
+              <td><button class="botonReparto buscarRutas"  id="verRutas" onclick="consultarClientesVendedores()"><i class="fa fa-search"></i> &nbsp;</button><div class="clear"></div></td>
+            </tr>
+          </table>
+           
+          <label style="font-weight: bold" id="fechaReparto"></label>
+          <label style="font-weight: bold" class="">RUTAS</label>
+          <table id="" class="tablaPrecios" cellspacing="0">
+              <thead>
+                  <tr>
+                      <th width=30% >Ruta</th>
+                      <th width=70% style="text-align:center">Repartidor</th>
+                  </tr>
+              </thead>
+          </table>
+
+          <div id="tablaClientesVendedor"></div>
+          <br>
+          <div id="tablaFacturasVendedor"></div>
+          
+      </div>  
+  </div>
+  <div data-role="page" id="reparto" style="top: 0px!important;position: absolute;" class="paginaActiva">
+      <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" data-slidemenu="#slidemenu" class="slidemenu1 " data-slideopen="false"  style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Reparto</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"  data-theme="b" style="display:none" data-collapsed="false" id="rutaRepartidor">
+        <legend>Ruta</legend>
+        <div><button class="botonReparto"  id="obtenerRuta" onclick="consultaRuta(0);"><i class="fa fa-undo"></i> Obtener ruta</button></div>
+        <div id="contenidoRuta" style="">
+        <div><button class="botonReparto"  id="iniciarRuta" onclick="iniciarRuta();"><i class="fa fa-hourglass-start"></i> Iniciar ruta</button></div>
+        <div><button class="botonReparto"  id="mapa" onclick=""><i class="fa fa-map-o"></i> Ver mapa</button></div>
+        <div><button class="botonReparto"  id="terminarRuta" onclick="terminarRuta();"><i class="fa fa-hourglass-end"></i> Terminar ruta</button></div>
+        <table id="" class="tablaPrecios" cellspacing="0" style="padding-top:10px">
+              <thead>
+                  <tr>
+                      <th width=20% ><label class="tf1" >Num. Factura</label> </th>
+                      <th width=70% style="text-align:center"><label class="tf2" >Cliente</label></th>
+                      <th width=10% style="">Status</th>
+                      <th  style="display: none">StatusClave</th>
+                      <th  style="display: none">Edocnum</th>
+                  </tr>
+              </thead>
+          </table>
+          
+        <div id="tblListaFacturas" style="margin-bottom: 10px"> </div>
+        <!-- <div id="map"></div> -->
+        <div id="map2"></div>
+      </div>
+    </div>
+    <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"  data-theme="b" style="display:none" data-collapsed="false" id="registroFactura">
+      <div id="ancla"></div>
+      <legend>Registrar factura</legend>
+      <div class="etiquetasReparto">Número factura:</div>
+      <div class="etiquetasReparto"><input type="text" id="numFacturaR"></div>
+      <div><button class="ui-btn ui-corner-all" onclick="LeerQr()" ><i class="fa fa-qrcode"></i> Escanear QR</button></div>
+      
+      <div class="etiquetasReparto ">Estado:</div>
+      <div id="radiosStatus"> </div>
+      <div><button class="ui-btn ui-corner-all " id="enviarReparto"><i class="fa fa-arrow-right fa-lg"></i> Enviar</button></div> 
+
+    <a href="#rutaRepartidor" class="ancla" style="padding:10px;"><i class="fa fa-list"></i> Ver facturas</a>
+      
+    </div>
+    <div class="clear"></div>
+    <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"  data-theme="b" style="display:none" data-collapsed="false" id="registroComida">
+      <legend>Registrar comida</legend>
+      <div style="height: 50px;">
+        <div><button class="botonReparto"  id="iniciarComida" onclick="iniciarComida();"><i class="fa fa-hourglass-start"></i> Iniciar comida</button></div>
+        <div><button class="botonReparto"  id="terminarComida" onclick="terminarComida();"><i class="fa fa-hourglass-end"></i> Terminar comida</button></div>
+      </div>
+    </div>
+    
+  </div>
+  <div data-role="page" id="llamadas" style="top: 0px!important;position: absolute;" class="paginaActiva">
+      <!-- llamadas    -->
+    <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" data-slidemenu="#slidemenu" class="slidemenu1 " data-slideopen="false"  style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Llamadas</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+    <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"  data-theme="b" style="display:block" data-collapsed="false" id="divLlamadas">
+      
+      <legend>Realizar llamadas</legend>
+          <div class="etiquetasReparto">Cliente:</div>
+          <div class="etiquetasReparto"><input type="text" id="clienteL"></div>
+          <div class="etiquetasReparto">Nombre:</div>
+          <div class="etiquetasReparto"><input type="text" id="nombreCL"></div>
+          <a href="#" data-role="button" data-icon="search" title="Buscar" data-inline="true" data-iconpos="notext" id="buscarCliente" onclick="return false">Buscar</a>           
+          <a href="#" data-role="button" data-icon="delete" title="Limpiar" data-inline="true" data-iconpos="notext" id="limpiarCampos" onclick="return false">Limpiar</a>  
+          <div id="telefonos" ></div>
+          
+          <div style="display:none" id="HI"></div>
+          <div style="display:none" id="HF"></div>
+      </div>
+    </div>      
+  </div>
+  <!-- llamadas    -->
+</body>
+    
+</html>

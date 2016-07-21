@@ -1,0 +1,169 @@
+.radioD{
+	padding:5px;
+	float:left;
+	width:100px;
+	height:25px;
+	background-color:#373737;	
+	color:#fff;
+	text-align:center;
+	text-shadow:none;
+	border-radius:2px ;
+}
+
+.activo{
+	background-color:#EF5A00;
+}
+.clear{
+	clear:both;
+}
+.descuentos{
+	padding-top: 15px;
+}
+.ui-autocomplete {
+    max-height: 100px;
+	/* max-width:100%; */
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+.tablaPrecios{
+	width:100%;
+	font-size:13px;
+}
+.tablaPrecios th{
+  background-color:#373737;
+  color:#fff;
+  padding:5px;
+  text-shadow:none;
+}
+.precios{
+	width:100%;
+	font-size:12px;
+}
+.precios td{
+	border-bottom:1px solid #373737;
+	padding:5px;
+}
+.precios tr:hover td { background: #FE8B44; color: #339; }
+/*.ui-menu .ui-menu-item { 
+	margin: 0;
+	padding: 6px 1em 6px .4em!important;
+}*/
+
+.facturas{
+	width:100%;
+	font-size:13px;
+}
+.facturas td{
+	border-bottom:1px solid #373737;
+	padding:5px;
+}
+.facturas tr{
+	height: 40px;
+	padding:5px;
+}
+
+ #map{  /*estilo del mapa*/
+    width: 100%;
+    height: 450px;
+	
+}
+
+.estado{
+	width: 20px;
+	height: 20px;
+	border:1px solid #000;
+	margin-left: 10px;
+}
+.N{
+	background-color: #DA0000;
+}
+.S{
+	background-color: #329A05;
+}
+.I{
+	background-color: #FF7F07;
+}
+
+#map2,
+#panorama {
+	width: 100%;
+    height: 450px;
+}
+.clienteDir{
+	padding: 3px;
+	background-color: #fff;
+	word-wrap: break-word; 
+	max-width:150px; 
+	font-size: 9px;
+}
+.botonReparto{
+	width: 136px!important;
+	font-size: 12px;
+	float: left;
+	margin: 5px 5px 0px 5px;
+}
+#numFacturaR{
+	height: 50px!important;
+}
+.etiquetasReparto{
+	padding-bottom: 0px;
+}
+.radios{
+	font-size: 14px !important;
+    margin-left: 25px !important;
+    margin-top: -15px !important;
+}
+.enlaceRuta{
+	style:"width:100%";
+	padding:5px;
+}
+/*#FE8B44*/
+
+.combos{
+	width: 100%;
+	padding:8px 0px; 
+	color:#333;
+}
+
+#tablaClientesVendedor{
+	overflow-y:scroll; overflow-x:hidden;
+     height:200px;
+}
+.fechas{
+	width:100px!important;
+	font-size: 13px!important;
+}
+.buscarRutas{
+	width: 60px!important;
+	margin-top:0px;
+}
+
+.botonConfigura{
+	float: left;
+	width: 100px;
+	border:1px solid black;
+	background-color: black;
+	padding: 5px;
+	margin-left:5px;
+	color: #fff; 
+}
+.operando{
+	background-color: #EF5A00!important;
+	border:1px solid #EF5A00!important;
+}
+.llamada{
+	background-color: #21A514;
+	color: #fff;
+	box-shadow: none;
+	margin-left: 10px;
+	padding: 5PX;
+	border-radius: 5px;
+	box-shadow: none;
+	border:none;
+}
+.numeroLlamada{
+	letter-spacing: 2px;
+	padding: 3px 0px 3px 10px;
+	border:none;
+}
